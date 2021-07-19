@@ -4,8 +4,14 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 
-@Entity
-@Table
+@Entity(name = "Student")
+@Table(
+        name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "student_name",columnNames = "name")
+        }
+
+)
 public class Student {
     @Id
     @SequenceGenerator(
