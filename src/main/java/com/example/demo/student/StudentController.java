@@ -1,9 +1,8 @@
 package com.example.demo.student;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -15,14 +14,32 @@ import java.util.List;
 
 public class StudentController {
 
-    @GetMapping
-    public List<Student> getStudent(){
-        return List.of(
-                new Student(
-                        1L,
-                        "Damish",
-                        LocalDate.of(1997, Month.SEPTEMBER,26)
-                )
-        );
+    private final StudentService  studentService ;
+
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
+
+    @GetMapping
+    public List<Student> getStudent() {
+            return  studentService.getStudent();
+    }
+
+    @PostMapping
+    public void registerNewStudent(@RequestBody Student student){
+        studentService.addNewStudent(student);
+    }
+
+    @DeleteMapping(path = "{studentId}")
+    public void deleteStudent(@PathVariable("studentId") Long studentId){
+        studentService.deleteStudent(studentId);
+    }
+
+    @PutMapping(path ="{studentId}" )
+    public void updateStudent(@PathVariable("studentId") Long studentId,@RequestParam("name") String name){
+        studentService.updateStudent(name,studentId);
+    }
+
+
 }
